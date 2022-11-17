@@ -14,6 +14,7 @@ const EventMarket = ({ market, onSelectOption }: Props) => {
       <div className="flex gap-1 w-full">
         {market.selections.map((select) => (
           <button
+            key={select.id}
             onClick={() => onSelectOption(market, select)}
             className={`border-black border flex justify-around w-1/3 font-semibold rounded-md ${
               select.BETANDO_SELECTION

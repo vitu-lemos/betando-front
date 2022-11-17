@@ -9,14 +9,14 @@ interface Props {
 const BetEventsList = ({ betEvents }: Props) => {
   return (
     <div className="w-full py-5 px-4">
-       <div className="w-full flex justify-around mb-2">
+      <div className="w-full flex justify-around mb-2">
         <span className="font-semibold text-xl">
           Eventos: {betEvents.length}
         </span>
         <span className="font-semibold text-xl">Odd total: 10</span>
       </div>
       {betEvents.map((bet) => (
-        <EventCard betEvent={bet} />
+        <EventCard betEvent={bet} key={bet.id} />
       ))}
     </div>
   );
