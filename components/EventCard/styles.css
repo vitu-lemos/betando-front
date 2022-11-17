@@ -1,0 +1,39 @@
+/* Title */
+
+body {
+position: absolute;
+width: 277px;
+height: 39px;
+left: 56px;
+top: 54px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 600;
+font-size: 32px;
+line-height: 39px;
+/* identical to box height */
+
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Eventos: 10 */
+
+
+position: absolute;
+width: 112px;
+height: 24px;
+left: 16px;
+top: 156px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 600;
+font-size: 20px;
+line-height: 24px;
+
+color: #FFFFFF;
+}
