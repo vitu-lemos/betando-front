@@ -1,30 +1,35 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { getNexTBetEvents } from "../api/getEvents";
+import { getNexTBetanoEvents } from "../api/services/betanoIntagration";
+
 import EventsList from "../components/EventsList";
+import { TBetEvent } from "../types";
 
 export default function Home() {
   const [currentRange, setCurrentRange] = useState(3);
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<TBetEvent[]>([]);
   const { isSuccess, data, isLoading, isError } = useQuery(
     ["getNextBets", currentRange],
-    () => getNexTBetEvents({ hoursRange: currentRange })
+    () => getNexTBetanoEvents({ hours: currentRange })
   );
 
   useEffect(() => {
-    setEvents(data?.events);
+    if (isSuccess) {
+      setEvents(data.events);
+    }
+
     console.log("🚀 ~ file: index.tsx ~ line 16 ~ useEffect ~ data", data);
-  }, [data, isLoading, setEvents]);
+  }, [data, setEvents, isSuccess]);
 
   return (
     <main>
-      <div className="w-full max-w-lg h-screen mx-auto flex items-center  flex-col">
+      <div className="flex flex-col items-center w-full h-screen max-w-lg mx-auto">
         <h1 className="text-4xl font-semibold my-7">Proximos eventos</h1>
-        <label className="px-4 text-lg flex justify-center gap-2 w-full ">
+        <label className="flex justify-center w-full gap-2 px-4 text-lg ">
           {" "}
           Nas próximas{" "}
           <select
-            className="text-black p-1 rounded-md "
+            className="p-1 text-black rounded-md "
             name="currentRange"
             id="currentRange"
             onChange={(event) => setCurrentRange(parseInt(event.target.value))}
@@ -35,7 +40,7 @@ export default function Home() {
           </select>
         </label>
         {!isSuccess && (
-          <div className="h-screen  items-center flex">
+          <div className="flex items-center h-screen">
             {isLoading && <h1>Carregando...</h1>}
 
             {isError && <h1>Ocorreu um erro, tente novamente </h1>}
