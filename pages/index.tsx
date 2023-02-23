@@ -11,7 +11,8 @@ export default function Home() {
   const [prevEvents, setPrevEvents] = useState<TBetEvent[]>([]);
   const { isSuccess, data, isLoading, isError } = useQuery(
     ["getNextBets", currentRange],
-    () => getNexTBetanoEvents({ hours: currentRange })
+    () => getNexTBetanoEvents({ hours: currentRange }),
+    { refetchOnWindowFocus: false }
   );
 
   useEffect(() => {
