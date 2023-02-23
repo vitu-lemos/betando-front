@@ -9,14 +9,14 @@ interface Props {
 }
 const EventMarket = ({ market, onSelectOption }: Props) => {
   return (
-    <div className="flex flex-col p-2">
-      <span className="pb-2">{market.name}</span>
-      <div className="flex gap-1 w-full">
+    <div className="flex flex-col items-center p-2 mb-4">
+      <strong className="pb-2">{market.name}</strong>
+      <div className="flex w-full gap-1 justify-evenly ">
         {market.selections.map((select) => (
           <button
             key={select.id}
             onClick={() => onSelectOption(market, select)}
-            className={`border-black border flex justify-around w-1/3 font-semibold rounded-md ${
+            className={`border-black border flex justify-around w-1/3 text-base rounded-md ${
               select.BETANDO_SELECTION
                 ? "border-green-600 shadow-md bg-green-600 text-white"
                 : ""

@@ -2,7 +2,7 @@ import { TBetEvent, TBetEventMarket } from "../../types";
 import betanoInstance from "./betanoApi";
 
 const marketSelectionWithMinimalPrice = (market: TBetEventMarket) => {
-  const MAX_PRICE = 1.3;
+  const MAX_PRICE = 1.5;
   const selectionWithMinimalPrice = market.selections.find((selection: any) => {
     const isMatchPrice = selection.price <= MAX_PRICE;
     return isMatchPrice;
@@ -27,11 +27,9 @@ const getBestEvents = (events: Array<TBetEvent>) => {
     );
 
     if (finalResultMarket) {
+    // console.log('>>selection id', finalResultMarket.selections[0].id)
       const bestSelection = marketSelectionWithMinimalPrice(finalResultMarket);
-      console.log(
-        "🚀 ~ file: betanoIntagration.ts ~ line 30 ~ bestEvents ~ bestSelection",
-        bestSelection
-      );
+   
 
       if (bestSelection) {
         const parsedMarket = finalResultMarket.selections.map((selection) => {
@@ -40,24 +38,26 @@ const getBestEvents = (events: Array<TBetEvent>) => {
           }
           return selection;
         });
+        
+        const newEventMarkets = event.markets.map((market) => {
+          if(market.name === FINAL_RESULT_MARKET){
+            return {
+              ...market,
+              selections: parsedMarket,
+            }
+          }
+          return market
+        });
+        
         bestEvents.push({
           ...event,
-          markets: [
-            {
-              ...event.markets,
-              ...finalResultMarket,
-              selections: parsedMarket,
-            },
-          ],
+          markets: newEventMarkets,
         });
       }
     }
   });
 
-  console.log(
-    "🚀 ~ file: betanoIntagration.ts ~ line 45 ~ getBestEvents ~ length",
-    bestEvents.length
-  );
+ 
 
   return bestEvents;
 };
@@ -77,6 +77,7 @@ const getNexTBetanoEvents = async ({
     const events = data.data.blocks[0].events;
 
     const response={events: getBestEvents(events)}
+    console.log('response',response)
     return response;
   } catch (err) {
     console.log(err);

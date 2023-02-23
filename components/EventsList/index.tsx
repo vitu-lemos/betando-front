@@ -4,19 +4,34 @@ import EventCard from "../EventCard";
 
 interface Props {
   betEvents: Array<TBetEvent>;
+  titleLabel: string;
+  onSelectEvent?: (event: TBetEvent) => void;
 }
 
-const BetEventsList = ({ betEvents }: Props) => {
+const BetEventsList = ({ betEvents, titleLabel, onSelectEvent }: Props) => {
+  const totalOdd = () => {
+    let total = 0;
+    betEvents.forEach((bet) => {
+      bet.markets.forEach((market) => {
+        market.selections.forEach((selection) => {
+          if (selection.BETANDO_SELECTION) {
+            total += selection.price - 1;
+          }
+        });
+      });
+    });
+    return total.toFixed(2);
+  };
   return (
-    <div className="w-full py-5 px-4">
-      <div className="w-full flex justify-around mb-2">
-        <span className="font-semibold text-xl">
-          Eventos: {betEvents.length}
+    <div className="w-full px-4 py-5">
+      <div className="flex justify-around w-full mb-2">
+        <span className="text-xl font-semibold">
+          {`${titleLabel}: ${betEvents.length}`}
         </span>
-        <span className="font-semibold text-xl">Odd total: 10</span>
+        <span className="text-xl font-semibold">{`Odd total: ${totalOdd()}`}</span>
       </div>
       {betEvents.map((bet) => (
-        <EventCard betEvent={bet} key={bet.id} />
+        <EventCard onSelectEvent={onSelectEvent} betEvent={bet} key={bet.id} />
       ))}
     </div>
   );

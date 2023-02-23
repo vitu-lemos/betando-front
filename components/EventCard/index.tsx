@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useState } from "react";
 import Timestamp from "react-timestamp";
 import {
   TBetEvent,
@@ -11,25 +10,25 @@ import EventMarket from "./EventMaket";
 
 interface Props {
   betEvent: TBetEvent;
+  onSelectEvent?: (event: TBetEvent) => void;
 }
-const EventCard = ({ betEvent }: Props) => {
+const EventCard = ({ betEvent, onSelectEvent }: Props) => {
   const onSelectOption = (
     market: TBetEventMarket,
     select: TBetEventMarketSelection
   ) => {
-    console.log(
-      `apostando em:${betEvent.name} - ${market.name} - opção: ${select.name}`
-    );
-
     const BETANDO_BASE_SITE_URL = process.env.NEXT_PUBLIC_BETANDO_BASE_SITE_URL;
     const url = `${BETANDO_BASE_SITE_URL}${betEvent.url}`;
+    onSelectEvent && onSelectEvent(betEvent);
     window.open(url, "_blank");
   };
 
   return (
-    <div className="bg-white border text-black rounded-lg text-center flex flex-col justify-center mb-4 divide-y divide-black">
-      <div className=" py-2 ">
-        <p className="font-semibold text-md">
+    <div
+      className={`flex flex-col justify-center mb-6 text-center text-black bg-white border divide-y divide-black rounded-lg`}
+    >
+      <div className="py-2 mb-3">
+        <p className="text-lg font-semibold text-red-500">
           {betEvent.participants[0].name} x {betEvent.participants[1].name}
         </p>
         <p>

@@ -7,7 +7,8 @@ import { TBetEvent } from "../types";
 
 export default function Home() {
   const [currentRange, setCurrentRange] = useState(3);
-  const [events, setEvents] = useState<TBetEvent[]>([]);
+  const [nextEvents, setNextEvents] = useState<TBetEvent[]>([]);
+  const [prevEvents, setPrevEvents] = useState<TBetEvent[]>([]);
   const { isSuccess, data, isLoading, isError } = useQuery(
     ["getNextBets", currentRange],
     () => getNexTBetanoEvents({ hours: currentRange })
@@ -15,12 +16,16 @@ export default function Home() {
 
   useEffect(() => {
     if (isSuccess) {
-      setEvents(data.events);
+      setNextEvents(data.events);
     }
 
-    console.log("🚀 ~ file: index.tsx ~ line 16 ~ useEffect ~ data", data);
-  }, [data, setEvents, isSuccess]);
-
+  }, [data, setNextEvents, isSuccess]);
+const onSelectedEvent = (event: TBetEvent) => {
+    const newPrevEvents = [...prevEvents, event];
+    setPrevEvents(newPrevEvents);
+    const newNextEvents = nextEvents.filter((nextEvent) => nextEvent.id !== event.id);
+    setNextEvents(newNextEvents);
+  };
   return (
     <main>
       <div className="flex flex-col items-center w-full h-screen max-w-lg mx-auto">
@@ -46,7 +51,19 @@ export default function Home() {
             {isError && <h1>Ocorreu um erro, tente novamente </h1>}
           </div>
         )}
-        {events && <EventsList betEvents={events} />}
+        {nextEvents && (
+          <EventsList
+            onSelectEvent={onSelectedEvent}
+            titleLabel="Prox eventos"
+            betEvents={nextEvents}
+          />
+        )}
+        {prevEvents && (
+          <EventsList
+            titleLabel="Eventos selecionados"
+            betEvents={prevEvents}
+          />
+        )}
         <span>
           With ❤️ by <a href="https://github.com/vitu-lemos">Vitu Lemos</a>
         </span>
